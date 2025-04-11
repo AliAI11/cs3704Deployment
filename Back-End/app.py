@@ -25,6 +25,13 @@ with app.app_context():
 vectorizer = joblib.load("vectorizer.jb")
 model = joblib.load("lr_model.jb")
 
+@app.route('/')
+def index():
+    return jsonify({
+        'status': 'online',
+        'message': 'Fake News Detector API is running!'
+    })
+
 def clean_text(text):
     text = text.lower()
     text = re.sub(r'\[.*?]', "", text)
