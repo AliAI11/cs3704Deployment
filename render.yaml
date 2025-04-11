@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: fake-news-detector
+    env: python
+    buildCommand: pip install -r Back-End/requirements.txt
+    startCommand: cd Back-End && gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0 

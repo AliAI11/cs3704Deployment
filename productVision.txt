@@ -1,0 +1,10 @@
+FOR IMMEDIATE RELEASE
+Blacksburg Labs Launches Verity AI: The Future of Fake News Detection is Here
+Blacksburg, VA – April 11, 2025
+Today, Blacksburg Labs is proud to announce the official release of Verity AI, a cutting-edge fake news detection tool designed to aid users in the fight against misinformation. Leveraging neural network technology and a comprehensive Kaggle dataset, Verity AI classifies news articles as credible or fraudulent.
+Verity AI’s state-of-the-art system processes user input in two ways. Users can either paste text directly into the web interface or simply provide a URL. In the URL case, Verity AI employs Beautiful Soup to automatically scrape and extract the full text from the website before analyzing it. The final result provides users with a clear, reliable credibility score.
+Built as a full-stack web application, Verity AI features a React.js frontend for a seamless user experience and a Python/Flask backend that handles data preprocessing, model predictions, and real-time JSON responses. This architecture allows it to be accessible on any device. 
+“Our mission is to help people separate fact from fiction in an era overwhelmed by misinformation,” said Afeef Ali, Engineer at Blacksburg Labs. “We’re proud to offer a tool that’s both powerful and easy to use.”
+Developed with agile methodologies and managed via GitLab for efficient version control, Verity AI is the product of a collaborative effort that emphasizes continuous improvement. Unlike other fake news detection tools, Verity AI is a free tool that stands out through its high accuracy, ease of use, and real-time analysis. By integrating user feedback and continuous updates, it remains at the forefront of technological innovation and practical usability.
+About Blacksburg Labs: Based in Virginia, Blacksburg Labs is an AI startup dedicated to developing innovative solutions that enhance accuracy and user experience. By focusing on real-world challenges, the company continues to push the boundaries of what is possible in artificial intelligence.
+For more information, please visit www.verity.ai or contact us at info@blacksburglabs.com.

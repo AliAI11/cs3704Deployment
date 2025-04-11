@@ -1,0 +1,13 @@
+High-Level Product Backlog
+
+User Stories:
+    
+    As a reporter, I want to be able to deliver accurate information so that I may spread this  information with my followers/viewers.
+
+    As an independent voter, I want to be able to receive factual information of both opponents, instead of propaganda, to figure out the right candidate to vote for.
+
+    As someone who is terrified of diseases since the pandemic, I want information that I can rely on so that I can stay safe and know what precautions to take.
+
+    As a professor, it is important to provide my students with precise and reliable resources, so that they can become well-informed and critical thinkers. 
+
+    As an influencer, I want to be able to verify

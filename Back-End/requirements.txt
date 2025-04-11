@@ -1,0 +1,10 @@
+scikit-learn
+pandas
+joblib
+streamlit
+requests
+beautifulsoup4
+flask
+flask-cors
+flask_sqlalchemy
+gunicorn
