@@ -7,87 +7,66 @@ from bs4 import BeautifulSoup
 import os
 import pandas as pd
 from datetime import datetime
-import sqlite3
 import json
 import time
 
 # Set page title and layout
 st.set_page_config(page_title="Fake News Detector", layout="wide")
 
-# Database setup
-def init_db():
-    # Create a database connection
-    conn = sqlite3.connect('articles.db', check_same_thread=False)
-    c = conn.cursor()
-    
-    # Create table if it doesn't exist
-    c.execute('''
-    CREATE TABLE IF NOT EXISTS articles (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        content TEXT NOT NULL,
-        prediction TEXT NOT NULL,
-        analysis_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        source_type TEXT NOT NULL,
-        source_value TEXT
-    )
-    ''')
-    conn.commit()
-    return conn
+# Session state database setup (replacing SQLite)
+if 'articles' not in st.session_state:
+    st.session_state.articles = []
+    st.session_state.article_id_counter = 1
 
-# Initialize the database connection
-conn = init_db()
-
-# Store connection in session state so it can be accessed across reruns
-if 'db_conn' not in st.session_state:
-    st.session_state.db_conn = conn
-
-# Database operations
+# Database operations using session state
 def store_article(title, content, prediction, source_type, source_value):
-    conn = st.session_state.db_conn
-    c = conn.cursor()
-    c.execute(
-        '''INSERT INTO articles (title, content, prediction, analysis_date, source_type, source_value) 
-        VALUES (?, ?, ?, ?, ?, ?)''',
-        (title, content, prediction, datetime.now(), source_type, source_value)
-    )
-    conn.commit()
-    return c.lastrowid
+    article_id = st.session_state.article_id_counter
+    st.session_state.article_id_counter += 1
+    
+    article = {
+        'id': article_id,
+        'title': title,
+        'content': content,
+        'prediction': prediction,
+        'analysis_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        'source_type': source_type,
+        'source_value': source_value
+    }
+    
+    st.session_state.articles.append(article)
+    return article_id
 
 def get_articles():
-    conn = st.session_state.db_conn
-    c = conn.cursor()
-    c.execute('''SELECT id, title, content, prediction, analysis_date, source_type, source_value 
-               FROM articles ORDER BY analysis_date DESC''')
-    rows = c.fetchall()
-    
     articles = []
-    for row in rows:
-        content_preview = row[2][:500] + '...' if len(row[2]) > 500 else row[2]
+    for article in st.session_state.articles:
+        # Create a preview of the content
+        content_preview = article['content'][:500] + '...' if len(article['content']) > 500 else article['content']
+        
         articles.append({
-            'id': row[0],
-            'title': row[1],
+            'id': article['id'],
+            'title': article['title'],
             'content': content_preview,
-            'prediction': row[3],
-            'analysis_date': row[4],
-            'source_type': row[5],
-            'source_value': row[6]
+            'prediction': article['prediction'],
+            'analysis_date': article['analysis_date'],
+            'source_type': article['source_type'],
+            'source_value': article['source_value']
         })
     return articles
 
 # Load models from the Back-End directory
 @st.cache_resource
 def load_models():
-    vectorizer = joblib.load("Back-End/vectorizer.jb")
-    model = joblib.load("Back-End/lr_model.jb")
-    return vectorizer, model
+    try:
+        vectorizer = joblib.load("Back-End/vectorizer.jb")
+        model = joblib.load("Back-End/lr_model.jb")
+        return vectorizer, model
+    except Exception as e:
+        st.error(f"Error loading models: {str(e)}")
+        return None, None
 
-try:
-    vectorizer, model = load_models()
-    models_loaded = True
-except Exception as e:
-    st.error(f"Error loading models: {str(e)}")
-    models_loaded = False
+# Try to load models
+vectorizer, model = load_models()
+models_loaded = vectorizer is not None and model is not None
 
 # Functions from the original app
 def clean_text(text):
